@@ -1,0 +1,150 @@
+@font-face {
+  font-family: 'Europa';
+  src: url('fonts/europa.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Circular Book';
+  src: url('fonts/circular-book.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brandon';
+  src: url('fonts/Brandon.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
+body{
+  background-color: #eee;
+  font-size: 0.8em;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
+
+
+  color: #bbb;
+
+  background: url('https://media.giphy.com/media/sQK17loBCgWuk/giphy.gif') no-repeat fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+/*universal*/
+.float-right{
+  float: right;
+}
+
+.text-center{
+  text-align: center;
+}
+.pure-menu{
+  padding: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+  background-color: white;
+
+  height: 100px !important;
+}
+
+.p-menu{
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+
+}
+
+.pure-menu-list{
+
+}
+.pure-menu-link{
+
+}
+
+.pure-menu-link:hover{
+
+  color:  #0000FF;
+  background-color: white !important;
+}
+
+.pure-menu a{  
+  color: #333; 
+}
+
+.pure-menu-children{
+  border: 0.2em solid black;
+}
+
+.menu-icon{
+  font-size: 1.5em;
+
+}
+
+/*progress bar*/
+.progress {
+  width: 100%;
+  height: 2px;
+}
+
+.progress-wrap {
+  background: #0000FF;
+  overflow: hidden;
+  position: relative;
+}
+.progress-wrap .progress-bar {
+  background: #f9f9f9;
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+/*-----*/
+
+.menu-input-item{
+    width: 99%;
+}
+.menu-input{
+  box-sizing: border-box;
+  padding: 1em 0em 1em 1em;
+  margin-top: 1em;
+  overflow: hidden;
+  border: none;
+  width: 100%;
+  border-top: 0.1em solid #ddd !important;
+
+  color: #333 !important;
+}
+
+.menu-input:focus {outline:0;}
+
+
+/*-----*/
+
+#soundcloud-song{
+  padding: 1em;
+  background-color: #333;
+}
+
+#sound-icon{
+  padding-right: 1em;
+  padding-left: 0.25em;
+  background-color: 
+  color: white;
+}
+
+#sound-icon:hover{
+  cursor: pointer;
+}
+
+#sound-song{
+  color: white;
+  text-decoration: none;
+}

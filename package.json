@@ -1,0 +1,19 @@
+{
+  "name": "thegifcloud",
+  "version": "1.0.0",
+  "description": "fuck off - change this later",
+  "main": "./src/app.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "pretest": "jshint ./src",
+    "test": "echo \"Tests Complete\""
+  },
+  "author": "Alberto Camacho",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "socket.io": "^1.4.5"
+  },
+  "devDependencies": {
+    "jshint": "^2.5.6"
+  }
+}
