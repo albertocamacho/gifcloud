@@ -9,7 +9,7 @@ var sockets = require('./socket.js'); //pull in our custom socket module
 var port = process.env.PORT || process.env.NODE_PORT || 3000; 
 
 //Filenames to load into memory. We will automatically assume for this is example that these are in our /client folder
-var fileNames = ['/client.html', '/client.js', '/style.css'];
+var fileNames = ['/client.html', '/client.js', '/soundcloud.js', '/jquery.js', '/style.css'];
 
 //object to store our files in memory by key. We will load all of these files into memory to cache them
 //Then we will serve our files from here.

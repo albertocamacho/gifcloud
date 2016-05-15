@@ -4,7 +4,8 @@
 	<meta charset="utf-8"/>
 	<title> Gifcloud Testing </title>
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
-	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css">
+
 	
 	<style type="text/css">
 
@@ -19,11 +20,13 @@
 
 			color: #bbb;
 
-			background: url('https://media.giphy.com/media/sQK17loBCgWuk/giphy.gif') no-repeat fixed;
+			 background: url('https://media.giphy.com/media/sQK17loBCgWuk/giphy.gif') no-repeat fixed;
 			-webkit-background-size: cover;
 			-moz-background-size: cover;
 			-o-background-size: cover;
 			background-size: cover;
+
+			
 		}
 
 		/*universal*/
@@ -35,9 +38,7 @@
 			text-align: center;
 		}
 		.pure-menu{
-			padding: 1em;
-			padding-left: 1em;
-			padding-right: 1em;
+			padding: 1.5em 1em 1em 1em;
 			background-color: white;
 
 			height: 50px;
@@ -53,7 +54,16 @@
 			color: #333; 
 		}
 
+		.pure-menu-item{
+			padding-left: 0.5em;
+			padding-right: 0.5em;
+		}
+		.pure-menu-has-children{
+			color: #333;
+		}
 		.pure-menu-children{
+			color: #999;
+			margin-top: 0.5em;
 			border: 0.2em solid black;
 		}
 
@@ -82,12 +92,17 @@
 
 		/*------*/
 
-		.gif-suggestion{
+		#gif-suggestion-current, #sc-suggestion-current{
+			color: #333;
+			cursor: pointer;
+		}
+
+		.gif-suggestion, .sc-suggestion{
 			padding: 1em;
 			cursor: pointer;
 		}
 
-		.gif-suggestion:hover{
+		.gif-suggestion:hover, .sc-suggestion:hover{
 			color: #333;
 		}
 
@@ -125,48 +140,47 @@
 	<div class="pure-menu pure-menu-horizontal">
 		<ul class="pure-menu-list">
 
-			<li class="pure-menu-item pure-menu-selected"> Watching </li>
+			<li class="pure-menu-item"> Watching </li>
 
 			<li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-				<span href="#" id="gif-suggestion-current" class="pure-menu-link">Current Gif</span>
+				<span href="#" id="gif-suggestion-current">Current Gif</span>
+				<i class="fa fa-caret-down" aria-hidden="true"></i>
 
 				<ul class="pure-menu-children" id = "gif-suggestion-list">
-					<li class="pure-menu-item gif-suggestion">
-						<span class = "gif-suggestion-votes"> 45 </span> 
-						<span class = "gif-suggestion-content"> Test One </span>
-					</li>	
-
-					<li class="pure-menu-item gif-suggestion">
-						<span class = "gif-suggestion-votes"> 30 </span> 
-						<span class = "gif-suggestion-content"> Test Two </span>
-					</li>	
-
-					<li class="pure-menu-item gif-suggestion">
-						<span class = "gif-suggestion-votes"> 15</span> 
-						<span class = "gif-suggestion-content"> Test Three </span>
-					</li>	
-
-					<li class="pure-menu-item gif-suggestion">
-						<span class = "gif-suggestion-votes"> 15</span> 
-						<span class = "gif-suggestion-content"> Test Three </span>
-					</li>	
-
 
 				</ul>
-
 			</li>
+
+
+			<li class="pure-menu-item"> Listening to </li>
+
+			<li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+				<span href="#" id="sc-suggestion-current"> Current Song </span>
+				<i class="fa fa-caret-down" aria-hidden="true"></i>
+
+				<ul class="pure-menu-children" id = "sc-suggestion-list">
+
+				</ul>
+			</li>
+
+
 		</ul>
 	</div>
 
 
 	<div id = "soundcloud-song">
-		<a id = "sound-song" target="_Blank"> Prince - Some Really Sick Title </a> 
+		<a id = "sound-song" target="_Blank">  Powered by SoundCloud </a> 
 	</div>
 
+	<audio id="player"></audio>
 
 
-	<script src ='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+	<script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
+	<script src="/jquery.js"></script>
+	<!-- <script src ='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>-->
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="/soundcloud.js"></script>
 	<script src="/client.js"></script>
 </body>
 </html>
