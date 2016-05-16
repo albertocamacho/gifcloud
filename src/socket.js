@@ -1,14 +1,15 @@
 var io; //our socket.io server (passed in from the app)
-var users = [];
+var userCount = 1;
 
 var SC_Suggestions = [];
 var Giphy_Suggestions = [];
 
-
+var topGif;
+var topSC;
 
 setInterval(function(){
-  //findTopSuggestions();
-}, 5000);   
+  findTopSuggestions();
+}, 30000);   
 
 
 
@@ -17,14 +18,10 @@ function suggestion(votes, name){
   this.name = name;
 }
 
-function findSuggestion(){
-  return suggestion.name === 'test';
-}
-
 
 function findTopSuggestions(){
-  var topGif = Giphy_Suggestions[0];
-  var topSC = SC_Suggestions[0];
+  topGif = Giphy_Suggestions[0];
+  topSC = SC_Suggestions[0];
 
   for(var i = 1; i < SC_Suggestions.length; i++){
       if(SC_Suggestions[i].votes > topSC.votes){
@@ -38,36 +35,55 @@ function findTopSuggestions(){
       }
   }
 
-  console.log('top gif: ' + topGif.name + ' top sc: ' + topSC.name);
+  updateMedia(topGif, topSC);
+
+  //console.log('top gif: ' + topGif.name + ' top sc: ' + topSC.name);
+}
+
+function updateMedia(gif, sc){
+
+  io.sockets.emit('Update_toClient', {'gif' : gif.name , 'sc' : sc.name });
+ 
 }
 
 var configureSockets = function(socketio) {
 	io = socketio; 
 
-
   testSuggestion = new suggestion(5, 'Robots');
   testSuggestionTwo = new suggestion(7, 'Cats');
+  testSuggestionThree = new suggestion(10, 'Trippy');
 
-  testSuggestionThree = new suggestion(3,'Janet Jackson');
-  testSuggestionFour = new suggestion(9, 'Fallout Boy')
+  testSuggestionFour = new suggestion(6,'STRFKR');
+  testSuggestionFive = new suggestion(9, 'Tame Impala');
+  testSuggestionSix = new suggestion(11, 'Washed Out');
 
   Giphy_Suggestions.push(testSuggestion);
   Giphy_Suggestions.push(testSuggestionTwo);
+  Giphy_Suggestions.push(testSuggestionThree);
 
-  SC_Suggestions.push(testSuggestionThree);
+  
   SC_Suggestions.push(testSuggestionFour);
-
+  SC_Suggestions.push(testSuggestionFive);
+  SC_Suggestions.push(testSuggestionSix);
 
 
   io.sockets.on('connection', function(socket) { 
 
-    users[socket.name] = socket.name;
+    userCount++;
 
     socket.join('livefeed');
 
-    socket.emit('UserCount_toClient', { count: users.length });
+    socket.emit('UserCount_toClient', { count: userCount });
     socket.emit('Giphy_Suggestion_toClient', JSON.stringify(Giphy_Suggestions));
     socket.emit('SC_Suggestion_toClient', JSON.stringify(SC_Suggestions));
+
+
+    socket.on('New_SC_Suggestion_toServer', function(data){
+      newSuggestion = new suggestion(data.votes, data.suggestion);
+      SC_Suggestions.push(newSuggestion);
+
+      socket.emit('SC_Suggestion_toClient', JSON.stringify(SC_Suggestions));
+    });
 
     socket.on('SC_Suggestion_toServer', function(data){
       for(var i = 0; i < SC_Suggestions.length; i++){
@@ -78,6 +94,14 @@ var configureSockets = function(socketio) {
       }
 
       socket.emit('SC_Suggestion_toClient', JSON.stringify(SC_Suggestions));
+    });
+
+    socket.on('New_Giphy_Suggestion_toServer', function(data){
+
+      newSuggestion = new suggestion(data.votes, data.suggestion);
+      Giphy_Suggestions.push(newSuggestion);
+
+      socket.emit('Giphy_Suggestion_toClient', JSON.stringify(Giphy_Suggestions));
     });
 
     socket.on('Giphy_Suggestion_toServer', function(data){
@@ -94,9 +118,11 @@ var configureSockets = function(socketio) {
       socket.emit('Giphy_Suggestion_toClient', JSON.stringify(Giphy_Suggestions));
     });
 
+
+
     socket.on('disconnect', function(data){
       socket.leave('livefeed'); 
-      delete users[socket.name];
+      userCount--;
     });
 
   });

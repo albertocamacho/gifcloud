@@ -1,15 +1,17 @@
-var CLIENT_ID = 'c87401e23d531754aada98044bb88d04';
+var SC_CLIENT_ID = 'c87401e23d531754aada98044bb88d04';
 
-function SoundCloud(){
+
+function SoundCloud(client_id){
 	//initialize soundcloud object
 	SC.initialize({
-		client_id: CLIENT_ID	
+		client_id: SC_CLIENT_ID	
 	});
 }
 
 
 SoundCloud.prototype.setSC = function(query){
 
+	document.getElementById('sc-suggestion-current').innerHTML = query;
 	var audioElement = document.getElementById('player');
 	var trackElement = document.getElementById('soundcloud-song');
 	var streamURL;
@@ -19,14 +21,14 @@ SoundCloud.prototype.setSC = function(query){
 		
 		SC.resolve(tracks[0].permalink_url).then(function(track){
 
-			stream_url = track.stream_url + '?client_id=' + CLIENT_ID;
+			stream_url = track.stream_url + '?client_id=' + SC_CLIENT_ID;
 		
 			audioElement.setAttribute("src", stream_url);
 			audioElement.load();
 			audioElement.play();
 
 			trackElement.innerHTML = track.title;
-			trackElement.setAttribute("href", track_url);
+			trackElement.setAttribute("href", track_url);	
 
 		 });
 	})

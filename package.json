@@ -1,7 +1,7 @@
 {
   "name": "thegifcloud",
-  "version": "1.0.0",
-  "description": "fuck off - change this later",
+  "version": "0.9.9",
+  "description": "soundcloud and giphy visualizer",
   "main": "./src/app.js",
   "scripts": {
     "start": "node ./src/app.js",
