@@ -1,9 +1,9 @@
 "use strict";
 
-
 function init () {
 
     var audio = document.getElementById('player');
+    var initialized = false;
 
     var GIPHY_API_KEY = "dc6zaTOxFJmzC";
     var gifs = [];
@@ -22,7 +22,8 @@ function init () {
 
 
     socket.on('connect', function(){
-    	console.log('socket connected');
+    	console.log('socket connected');       
+
 
         getGiphy('Bananas');
         SC.setSC('Miike Snow');
@@ -48,6 +49,14 @@ function init () {
 
         dancer.audio.src = audio.src;
         dancer.source.src = audio.src;
+
+        if(initialized == false){
+           $('.menu-initial').toggle(function(){
+             $('.menu-primary').toggle(function(){
+                initialized = true;
+             });
+           });
+        }
     });
 
 
@@ -58,22 +67,23 @@ function init () {
         var suggestionsObj = $.parseJSON(suggestionsString); 
         var suggestions =  $.map(suggestionsObj, function(el) { return el; });
 
-        var li = document.createElement('li');
-        $(li).addClass('pure-menu-item');
-        $(li).addClass('text-center');
-        $(li).append('<p class = "p-menu"><em>----------- Vote -----------</em></p>');
-        document.getElementById('sc-suggestion-list').appendChild(li);
 
         for(var i = 0; i < suggestions.length; i++){
 
             var suggestion = suggestions[i].name;
             var votes = suggestions[i].votes;
+
             var li = document.createElement('li');
 
             li.addEventListener("click", sendSCSuggestion);
 
             $(li).addClass('pure-menu-item');
             $(li).addClass('sc-suggestion');
+            $(li).addClass('pure-menu-link');
+            
+
+     
+   
 
             $(li).append('<i class="fa fa-thumbs-o-up" aria-hidden="true"></i> ');
             $(li).append('<span class = "sc-suggestion-vote">' + votes + '</span');
@@ -110,16 +120,11 @@ function init () {
         var suggestionsObj = $.parseJSON(suggestionsString); 
         var suggestions =  $.map(suggestionsObj, function(el) { return el; });
 
-        var li = document.createElement('li');
-        $(li).addClass('pure-menu-item');
-        $(li).addClass('text-center');
-        $(li).append('<p class = "p-menu"><em>----------- Vote -----------</em></p>');
-        document.getElementById('gif-suggestion-list').appendChild(li);
-
         for(var i = 0; i < suggestions.length; i++){
 
             var suggestion = suggestions[i].name;
             var votes = suggestions[i].votes;
+  
             var li = document.createElement('li');
 
             //console.log('name : ' + sug + ' votes: ' + votes);
@@ -127,7 +132,10 @@ function init () {
 
             $(li).addClass('pure-menu-item');
             $(li).addClass('gif-suggestion');
+            $(li).addClass('pure-menu-link');
 
+
+            
             $(li).append('<i class="fa fa-thumbs-o-up" aria-hidden="true"></i> ');
             $(li).append('<span class = "gif-suggestion-vote">' + votes + '</span');
             $(li).append('<span class = "gif-suggestion-content"> ' + suggestion + ' </span>');
@@ -155,19 +163,22 @@ function init () {
     }); 
 
 
-    function sendGiphySuggestion(){
-
+function sendGiphySuggestion(){
+      console.log(this);
+      
       var suggestion_votes = $(this).find('.gif-suggestion-vote').html();
       suggestion_votes = parseInt(suggestion_votes);
 
       var suggestion_name = $(this).find('.gif-suggestion-content').html();
 
       suggestion_name = suggestion_name.slice(1, -1);
-      socket.emit('Giphy_Suggestion_toServer', { suggestion: suggestion_name, votes: suggestion_votes } ); 
+      socket.emit('Giphy_Suggestion_toServer', { suggestion: suggestion_name, votes: suggestion_votes }); 
   }
 
 
   function sendSCSuggestion(){
+    console.log(this);
+
     var suggestion_votes = $(this).find('.sc-suggestion-vote').html();
     suggestion_votes = parseInt(suggestion_votes);
 
@@ -218,10 +229,6 @@ function setBackground(){
         randomNumber = Math.floor((Math.random() * gifs.length) + 1);
     }
 }
-
-
-
-
 
 
 

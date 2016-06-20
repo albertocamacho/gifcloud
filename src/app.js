@@ -8,7 +8,7 @@ var sockets = require('./socket.js');
 var port = process.env.PORT || process.env.NODE_PORT || 3000; 
 
 
-var fileNames = ['/client.html', '/client.js', '/soundcloud.js', '/dancer.js', '/jquery.js', '/style.css', '/circular-book.ttf'];
+var fileNames = ['/client.html', '/client.js', '/soundcloud.js', '/dancer.js', '/jquery.js', '/circular-book.ttf'];
 
 var cachedFiles = {};
 

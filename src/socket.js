@@ -1,5 +1,5 @@
 var io; //our socket.io server (passed in from the app)
-var userCount = 1;
+var userCount = 0;
 
 var SC_Suggestions = [];
 var Giphy_Suggestions = [];
@@ -35,27 +35,46 @@ function findTopSuggestions(){
       }
   }
 
-  updateMedia(topGif, topSC);
+  updateMedia(topGif, topSC, function(){
+    clearSuggestions();
+  });
+ 
+
 
   //console.log('top gif: ' + topGif.name + ' top sc: ' + topSC.name);
 }
 
-function updateMedia(gif, sc){
-
+function updateMedia(gif, sc, callback){
   io.sockets.emit('Update_toClient', {'gif' : gif.name , 'sc' : sc.name });
- 
+
+  callback();
+}
+
+function clearSuggestions(){
+  SC_Suggestions = [];
+  Giphy_Suggestions = [];
+
+  var newGiphySuggestion = new suggestion(5, 'Mulan');
+  var newSCSuggestion = new suggestion(5, 'Mothra');
+
+  Giphy_Suggestions.push(newGiphySuggestion);
+  SC_Suggestions.push(newSCSuggestion);
+
+  io.sockets.emit('SC_Suggestion_toClient', JSON.stringify(SC_Suggestions));
+  io.sockets.emit('Giphy_Suggestion_toClient', JSON.stringify(Giphy_Suggestions));
+
 }
 
 var configureSockets = function(socketio) {
 	io = socketio; 
 
-  testSuggestion = new suggestion(5, 'Robots');
-  testSuggestionTwo = new suggestion(7, 'Cats');
-  testSuggestionThree = new suggestion(10, 'Trippy');
+  var testSuggestion = new suggestion(5, 'Godzilla');
+  var testSuggestionTwo = new suggestion(7, 'Golddigger');
+  var testSuggestionThree = new suggestion(10, 'Yeezus');
 
-  testSuggestionFour = new suggestion(6,'STRFKR');
-  testSuggestionFive = new suggestion(9, 'Tame Impala');
-  testSuggestionSix = new suggestion(11, 'Washed Out');
+  var testSuggestionFour = new suggestion(6,'STRFKR');
+  var testSuggestionFive = new suggestion(9, 'Tame Impala');
+  var testSuggestionSix = new suggestion(11, 'Washed Out');
 
   Giphy_Suggestions.push(testSuggestion);
   Giphy_Suggestions.push(testSuggestionTwo);

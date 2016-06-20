@@ -19,68 +19,63 @@
 
 
 		body{
-			background-color: #eee;
-			font-size: 0.8em;
-			text-rendering: optimizeLegibility;
-			-webkit-text-size-adjust: 100%;
-			-webkit-font-smoothing: antialiased;
-			-moz-osx-font-smoothing: grayscale;
-
-			font-family: 'Circular Book';
-
-			color: #bbb;
-
-			background: url('https://media.giphy.com/media/sQK17loBCgWuk/giphy.gif') no-repeat fixed;
+			background: url('https://media.giphy.com/media/hEOWzixSIhcti/giphy.gif') no-repeat fixed;
 			-webkit-background-size: cover;
 			-moz-background-size: cover;
 			-o-background-size: cover;
 			background-size: cover;
 
-			
+			font-family: 'Circular Book';
+			font-size: 0.9em;
+			color: #bbb;
+
+			text-rendering: optimizeLegibility;
+			-webkit-text-size-adjust: 100%;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;			
 		}
 
 		/*universal*/
 		.float-right{
 			float: right;
 		}
-
 		.text-center{
 			text-align: center;
 		}
 
 
 
+		.menu-primary{
+			display: none;
+		}
+
 		.pure-menu{
-			padding: 1.25em 1em 1em 1em;
+			height: 80px;
+
+			padding: 2em 1em 1em 1em;
 			padding-left: 1em;
 			padding-right: 1em;
-			background-color: white;
-
-			height: 55px;
-		}
-
-		.p-menu{
-			padding-top: 0.5em;
-			padding-bottom: 0.5em;
 
 		}
+
+		.pure-menu-link{
+			cursor: pointer;
+		}
+
 		.label{
 			padding-left: 0.5em;
 			padding-right: 0.5em;
+
+			color: rgba(255,255,255,0.7);
 		}
 		.pure-menu-link:hover{
-
 			color:  #0000FF;
 			background-color: white !important;
 		}
 
-
-		.pure-menu a{  
-			color: #333; 
-		}
-
 		.pure-menu-children{
-			margin-top: 0.25em;
+			margin-top: 1em;
+			padding-top: 1em;
 			border: 0.2em solid black;
 		}
 
@@ -88,8 +83,11 @@
 			font-size: 1.5em;
 		}
 
+		.about-link{
+			opacity: 1em;
+		}
 		.fa-caret-down{
-			color: #333;
+			color: #fff;
 			padding-left: 0.25em;
 		}
 
@@ -108,31 +106,27 @@
 			color: #333 !important;
 		}
 
-		.menu-input:focus {outline:0;}
+		.menu-input:focus { outline:0; }
 
 
 
 		/*------*/
 
 		#gif-suggestion-current, #sc-suggestion-current{
-			color: #333;
+			color: #fff;
+
 			cursor: pointer;
 		}
 
 		.gif-suggestion, .sc-suggestion{
-			-webkit-touch-callout: none; /* iOS Safari */
-			-webkit-user-select: none;   /* Chrome/Safari/Opera */
-			-khtml-user-select: none;    /* Konqueror */
-			-moz-user-select: none;      /* Firefox */
-			-ms-user-select: none;       /* Internet Explorer/Edge */
 
-
-			padding: 0.5em 1em 0.5em 1em;
-			cursor: pointer;
 		}
 
-		.gif-suggestion:hover, .sc-suggestion:hover{
-			color: #333;
+		.suggestion-inactive{
+			pointer-events: none;
+			cursor: default;
+
+			color: red !important;
 		}
 
 
@@ -142,12 +136,12 @@
 		#soundcloud-song{
 			padding: 1em 0em 1em 1.5em;
 			background-color: #333;
+			display: none;
 		}
 
 		#sound-icon{
 			padding-right: 1em;
 			padding-left: 0.25em;
-			background-color: 
 			color: white;
 		}
 
@@ -164,37 +158,37 @@
 
 </head>
 
-<body>
+<body>	
 
-	<div class="pure-menu pure-menu-horizontal">
+	<div class = "pure-menu pure-menu-horizontal menu-initial">
+		<li class = "pure-menu-item label"> Syncinc to server, give it a damn second</li>
+	</div>
+
+	<div class="pure-menu pure-menu-horizontal menu-primary">
+
 		<ul class="pure-menu-list">
-
 			<li class="pure-menu-item label"> Watching </li>
-
 			<li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover label">
 				<span href="#" id="gif-suggestion-current">Current Gif</span>
 				<i class="fa fa-caret-down" aria-hidden="true"></i>
-
-				<ul class="pure-menu-children" id = "gif-suggestion-list">
-
+				<ul class="pure-menu-children" id = "gif-suggestion-list"> 
 				</ul>
 			</li>
 
 
 			<li class="pure-menu-item label"> and listening to </li>
-
 			<li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover label">
 				<span href="#" id="sc-suggestion-current"> Current Song </span>
 				<i class="fa fa-caret-down" aria-hidden="true"></i>
-
-				<ul class="pure-menu-children" id = "sc-suggestion-list">
-
+				<ul class="pure-menu-children" id = "sc-suggestion-list"> 
 				</ul>
 			</li>
 
 			<li class="pure-menu-item label"> with <span href="#" id="user-count"> </span> others </li>
+		</ul>
 
-
+		<ul class = "pure-menu-list float-right">
+			<li class="pure-menu-item label about-link"> About </li>
 		</ul>
 	</div>
 
@@ -207,8 +201,6 @@
 
 	<audio id="player" crossorigin="anonymous"></audio>
 
-
-
 	<script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
 	<script src="/jquery.js"></script>
 	<script src="/dancer.js"></script>
@@ -216,5 +208,6 @@
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/soundcloud.js"></script>
 	<script src="/client.js"></script>
+
 </body>
 </html>
