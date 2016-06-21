@@ -6,42 +6,42 @@ function init () {
     var initialized = false;
 
     var GIPHY_API_KEY = "dc6zaTOxFJmzC";
+    var GIPHY_API_URL_SEARCH = "https://api.giphy.com/v1/gifs/search?";
     var gifs = [];
-    var randomNumber;
+
+    var canvas = document.getElementById('viewport');
+    var context = canvas.getContext('2d');  
 
     var socket = io.connect(); 
     var SC = new SoundCloud();
+
     var dancer = new Dancer();
     var kick = dancer.createKick({
         onKick:function(mag){
-            setBackground();
+            setRandomBackground();
         }
     });
-
     kick.on();
 
 
     socket.on('connect', function(){
-    	console.log('socket connected');       
-
-
-        getGiphy('Bananas');
         SC.setSC('Miike Snow');
 
         //dancer.js methods
-
-        dancer.load( audio ); 
-        dancer.play();
-
-        console.log(dancer);
-        randomNumber = Math.floor((Math.random() * gifs.length) + 1);
-
+        dancer.load(audio);
+        if(dancer.isLoaded){
+            dancer.play();
+        }
     });
 
+
+/*
     socket.on('UserCount_toClient', function(data){
         console.log(data.count);
         document.getElementById('user-count').innerHTML = data.count;
     });
+
+    */
 
     socket.on('Update_toClient', function(data){
         getGiphy(data.gif);
@@ -51,13 +51,29 @@ function init () {
         dancer.source.src = audio.src;
 
         if(initialized == false){
-           $('.menu-initial').toggle(function(){
-             $('.menu-primary').toggle(function(){
-                initialized = true;
-             });
-           });
+            $('.menu-initial').toggle(function(){
+                $('.menu-primary').toggle(function(){
+                   initialized = true;
+               });
+            });
         }
     });
+
+
+    function createSuggestionElement(suggestion, votes, event){
+        var li = document.createElement('li');
+
+        li.addEventListener("click", event);
+        $(li).addClass('pure-menu-item');
+        $(li).addClass('sc-suggestion');
+        $(li).addClass('pure-menu-link');
+        $(li).append('<i class="fa fa-thumbs-o-up" aria-hidden="true"></i> ');
+        $(li).append('<span class = "sc-suggestion-vote">' + votes + '</span');
+        $(li).append('<span class = "sc-suggestion-content"> ' + suggestion + ' </span>');
+
+        document.getElementById('sc-suggestion-list').appendChild(li);
+    }
+
 
 
 
@@ -67,29 +83,8 @@ function init () {
         var suggestionsObj = $.parseJSON(suggestionsString); 
         var suggestions =  $.map(suggestionsObj, function(el) { return el; });
 
-
         for(var i = 0; i < suggestions.length; i++){
-
-            var suggestion = suggestions[i].name;
-            var votes = suggestions[i].votes;
-
-            var li = document.createElement('li');
-
-            li.addEventListener("click", sendSCSuggestion);
-
-            $(li).addClass('pure-menu-item');
-            $(li).addClass('sc-suggestion');
-            $(li).addClass('pure-menu-link');
-            
-
-     
-   
-
-            $(li).append('<i class="fa fa-thumbs-o-up" aria-hidden="true"></i> ');
-            $(li).append('<span class = "sc-suggestion-vote">' + votes + '</span');
-            $(li).append('<span class = "sc-suggestion-content"> ' + suggestion + ' </span>');
-
-            document.getElementById('sc-suggestion-list').appendChild(li);
+            createSuggestionElement(suggestions[i].name, suggestions[i].votes, sendSCSuggestion);
         }
 
         var li = document.createElement('li');
@@ -103,7 +98,6 @@ function init () {
                 return false;
             }
         }, false);
-
 
         $(li).addClass('pure-menu-item');
         $(li).addClass('menu-input-item');
@@ -124,7 +118,7 @@ function init () {
 
             var suggestion = suggestions[i].name;
             var votes = suggestions[i].votes;
-  
+
             var li = document.createElement('li');
 
             //console.log('name : ' + sug + ' votes: ' + votes);
@@ -163,7 +157,7 @@ function init () {
     }); 
 
 
-function sendGiphySuggestion(){
+    function sendGiphySuggestion(){
       console.log(this);
       
       var suggestion_votes = $(this).find('.gif-suggestion-vote').html();
@@ -193,44 +187,32 @@ function sendGiphySuggestion(){
 
 function getGiphy(gifTopic){
 
+    gifTopic = gifTopic.split(' ').join('+');
+    var url = GIPHY_API_URL_SEARCH + 'q=' + gifTopic + '&api_key=' + GIPHY_API_KEY;
+    //set the menu label to current gif topic
     document.getElementById('gif-suggestion-current').innerHTML = gifTopic;
-
-    gifs = []; 
-
-    var canvas = document.getElementById('viewport'),
-    context = canvas.getContext('2d');        
-
-
-    var api_url = "https://api.giphy.com/v1/gifs/search?"
-    var searchQuery = gifTopic;
-    var queryStripped = searchQuery.split(' ').join('+');
-    var url = api_url + 'q=' + queryStripped + '&api_key=' + GIPHY_API_KEY;
-
+    //reset array of gifs
+    gifs = [];
+    //get the gifs from giphy based on the giftopic search
     $.getJSON(url, function( data ) {
         $.each( data.data, function( i , item ) {
             if(item.images.downsized.url){
                 var url = item.images.downsized.url;
-
                 var new_image = new Image();
                 new_image.src = url;
                 gifs.push(new_image);
-
             }
         });
-    });        
-}
+    });
 
-function setBackground(){
-    randomNumber += Math.floor((Math.random() * 2) + 1);
-    if(randomNumber < gifs.length){
-        $('body').css('background-image', 'url(' + gifs[randomNumber].src + ')');
-    }
-    else{
-        randomNumber = Math.floor((Math.random() * gifs.length) + 1);
-    }
 }
 
 
+function setRandomBackground(){
+    var randomIndex = Math.floor((Math.random() * gifs.length) + 1);
+    console.log(randomIndex);
+    $('body').css('background-image', 'url(' + gifs[randomIndex].src + ')');
+}
 
 }
 

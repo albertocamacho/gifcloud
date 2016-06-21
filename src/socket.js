@@ -1,5 +1,5 @@
 var io; //our socket.io server (passed in from the app)
-var userCount = 0;
+//var userCount = 0;
 
 var SC_Suggestions = [];
 var Giphy_Suggestions = [];
@@ -54,8 +54,8 @@ function clearSuggestions(){
   SC_Suggestions = [];
   Giphy_Suggestions = [];
 
-  var newGiphySuggestion = new suggestion(5, 'Mulan');
-  var newSCSuggestion = new suggestion(5, 'Mothra');
+  var newGiphySuggestion = new suggestion(1, 'Unknown Mortal Orchestra');
+  var newSCSuggestion = new suggestion(1, 'Multilove');
 
   Giphy_Suggestions.push(newGiphySuggestion);
   SC_Suggestions.push(newSCSuggestion);
@@ -66,7 +66,7 @@ function clearSuggestions(){
 }
 
 var configureSockets = function(socketio) {
-	io = socketio; 
+  io = socketio; 
 
   var testSuggestion = new suggestion(5, 'Godzilla');
   var testSuggestionTwo = new suggestion(7, 'Golddigger');
@@ -88,11 +88,14 @@ var configureSockets = function(socketio) {
 
   io.sockets.on('connection', function(socket) { 
 
-    userCount++;
+   // userCount++;
+
 
     socket.join('livefeed');
 
-    socket.emit('UserCount_toClient', { count: userCount });
+    socket.emit('Update_toClient', {'gif' : 'disney' , 'sc' : 'deathgrips'});
+
+   // socket.emit('UserCount_toClient', { count: userCount });
     socket.emit('Giphy_Suggestion_toClient', JSON.stringify(Giphy_Suggestions));
     socket.emit('SC_Suggestion_toClient', JSON.stringify(SC_Suggestions));
 
@@ -141,7 +144,7 @@ var configureSockets = function(socketio) {
 
     socket.on('disconnect', function(data){
       socket.leave('livefeed'); 
-      userCount--;
+    //  userCount--;
     });
 
   });
